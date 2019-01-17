@@ -5,7 +5,8 @@ namespace Core;
 $routes = [
 	'/app/index',
 	'/app/login',
-	'/app/register'
+	'/app/register',
+	'/app/logout'
 	];
 
 foreach ($routes as $route) {

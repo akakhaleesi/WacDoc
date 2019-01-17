@@ -51,7 +51,7 @@ class AppController extends \Core\Controller {
           $register->bindParam(':login', $posts['login']);
           $register->bindParam(':password', $password);
           $register->execute();
-          mkdir($_SERVER['DOCUMENT_ROOT'].BASE_URI."/datas/".$posts['login']."/", 0700);
+          mkdir($_SERVER['DOCUMENT_ROOT'].BASE_URI."/datas/".$posts['login']."/", 0777);
           $this->render('login', ['success' => true]);
         }
       }
@@ -110,10 +110,10 @@ class AppController extends \Core\Controller {
     }
     else {
       if(isset($_POST['user_id']) && !empty($_POST['user_id'])){
-        $posts = ['id' => $_POST['user_id'], 'user_name' => $_SESSION['user_name']];
+        $posts = ['user_id' => $_POST['user_id'], 'user_name' => $_SESSION['user_name']];
         unset($_POST);
         $delete = $this->db->prepare("DELETE FROM users WHERE id = :id");
-        $delete->bindParam(':id', $posts['id']);
+        $delete->bindParam(':id', $posts['user_id']);
         $delete->execute();
         $this->rmdir($_SERVER['DOCUMENT_ROOT'].BASE_URI."/datas/".$posts['user_name']."/");
         session_destroy();

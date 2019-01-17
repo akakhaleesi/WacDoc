@@ -13,7 +13,8 @@ $routes = [
 	'/doc',
 	'/doc/index',
 	'/doc/create',
-	'/doc/save'
+	'/doc/save',
+	'/doc/modify'
 	];
 
 foreach ($routes as $route) {

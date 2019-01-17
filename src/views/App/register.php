@@ -8,6 +8,10 @@ if(isset($errors)){
 }
 ?>
 
+<ul>
+  <li><a href=<?= BASE_URI.'/app/login' ?>>Log in</a></li>
+</ul>
+
 <form action=<?= BASE_URI.'/app/register' ?> method="post">
   <label for="login">Login</label>
   <input type="text" name="login">

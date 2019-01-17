@@ -17,3 +17,13 @@ CREATE TABLE users (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
+
+DROP TABLE IF EXISTS users_docs;
+
+CREATE TABLE users_docs (
+   id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+   user_id INT NOT NULL,
+   name varchar(50) NOT NULL,
+   extension varchar(50) NOT NULL,
+   datas text
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;

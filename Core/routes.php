@@ -6,7 +6,9 @@ $routes = [
 	'/app/index',
 	'/app/login',
 	'/app/register',
-	'/app/logout'
+	'/app/logout',
+	'/app/delete',
+	'/app/parameters'
 	];
 
 foreach ($routes as $route) {

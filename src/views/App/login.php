@@ -3,10 +3,11 @@ if(isset($success)){
   echo "<p>You have been registered successfully </p>";
 }
 if(isset($errors)){
-  echo "<p>$errors</p>";
-}
-if(isset($_SESSION['user_id'])){
-  echo $_SESSION['user_id'];
+  echo "<div>";
+  foreach($errors as $error){
+    echo "<p>$error</p>";
+  }
+  echo "</div>";
 }
 ?>
 

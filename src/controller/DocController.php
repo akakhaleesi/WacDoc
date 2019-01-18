@@ -11,11 +11,11 @@ class DocController extends \Core\Controller {
   public function index(){
     if(isset($_SESSION['user_id'])){
       $files = [];
-      $searchFiles = $this->db->prepare("SELECT id,name FROM users_docs WHERE user_id = :user_id");
+      $searchFiles = $this->db->prepare("SELECT id,name,extension FROM users_docs WHERE user_id = :user_id");
       $searchFiles->bindParam(':user_id', $_SESSION['user_id']);
       $searchFiles->execute();
       while($datas = $searchFiles->fetch()){
-        array_push($files, ['id' => $datas['id'], 'name' => $datas['name']]);
+        array_push($files, ['id' => $datas['id'], 'name' => $datas['name'], 'extension' => $datas['extension']]);
       }
       $this->render('index', ['files' => $files]);
     }
@@ -117,7 +117,6 @@ class DocController extends \Core\Controller {
   public function upload(){
     if(isset($_SESSION['user_id'])){
       if(isset($_FILES['file']) && !empty($_FILES['file'])){
-        var_dump($_FILES);
         $fileContent = file_get_contents($_FILES['file']['tmp_name']);
         $filename = explode('.', $_FILES['file']['name']);
         $filename = $filename[0];
@@ -133,6 +132,71 @@ class DocController extends \Core\Controller {
     }
     else {
       $this->render('login', ['controller' => 'AppController']);
+    }
+  }
+
+  public function rename(){
+    if(isset($_SESSION['user_id'])){
+      if(isset($_POST['doc_name']) && !empty($_POST['doc_name'])){
+        $posts = ['doc_id' => $_POST['doc_id'], 'doc_name' => $_POST['doc_name'], 'doc_ext' => $_POST['doc_ext']];
+        unset($_POST);
+        $doc_data = $this->checkName($posts['doc_name'], $_SESSION['user_id'], $posts['doc_ext']);
+
+        $file = $this->db->prepare("SELECT name,extension FROM users_docs WHERE id = :id");
+        $file->bindParam(':id', $posts['doc_id']);
+        $file->execute();
+
+        if($datas = $file->fetch()){
+          $filepath = $_SERVER['DOCUMENT_ROOT'].BASE_URI."/datas/".$_SESSION['user_name']."/".$datas['name'].$datas['extension'];
+          $newfilepath = $_SERVER['DOCUMENT_ROOT'].BASE_URI."/datas/".$_SESSION['user_name']."/".$doc_data['name'].$doc_data['extension'];
+          rename($filepath, $newfilepath);
+        }
+        $updateName = $this->db->prepare("UPDATE users_docs SET name = :name WHERE id = :id");
+        $updateName->bindParam(':name', $posts['doc_name']);
+        $updateName->bindParam(':id', $posts['doc_id']);
+        $updateName->execute();
+        $updateExt = $this->db->prepare("UPDATE users_docs SET extension = :extension WHERE id = :id");
+        $updateExt->bindParam(':extension', $posts['doc_ext']);
+        $updateExt->bindParam(':id', $posts['doc_id']);
+        $updateExt->execute();
+
+        $this->render('index', ['errors' => ['success']]);
+      }
+      else {
+        $this->render('index');
+      }
+    }
+    else {
+      $this->render('login', ['controller' => 'appController']);
+    }
+  }
+
+  public function delete() {
+    if(isset($_SESSION['user_id'])){
+      if(!isset($_POST['doc_id'])){
+        $this->render('index');
+      }
+      else {
+        $posts = ['doc_id' => $_POST['doc_id']];
+        unset($_POST);
+
+        $file = $this->db->prepare("SELECT name,extension FROM users_docs WHERE id = :id");
+        $file->bindParam(':id', $posts['doc_id']);
+        $file->execute();
+        if($datas = $file->fetch()){
+          $filepath = $_SERVER['DOCUMENT_ROOT'].BASE_URI."/datas/".$_SESSION['user_name']."/".$datas['name'].$datas['extension'];
+          if(!is_dir($filepath)) unlink($filepath);
+
+          $delete = $this->db->prepare("DELETE FROM users_docs WHERE id = :id");
+          $delete->bindParam(':id', $posts['doc_id']);
+          $delete->execute();
+
+          $this->render('index', ['errors' => ['deleted']]);
+        }
+      }
+    }
+    else {
+      $this->render('login', ['controller' => 'appController']);
     }
   }
 

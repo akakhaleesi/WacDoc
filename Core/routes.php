@@ -15,7 +15,9 @@ $routes = [
 	'/doc/create',
 	'/doc/save',
 	'/doc/modify',
-	'/doc/upload'
+	'/doc/upload',
+	'/doc/rename',
+	'/doc/delete'
 	];
 
 foreach ($routes as $route) {

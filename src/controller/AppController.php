@@ -115,6 +115,9 @@ class AppController extends \Core\Controller {
         $delete = $this->db->prepare("DELETE FROM users WHERE id = :id");
         $delete->bindParam(':id', $posts['user_id']);
         $delete->execute();
+        $deleteDoc = $this->db->prepare("DELETE FROM users_docs WHERE user_id = :user_id");
+        $delete->bindParam(':user_id', $posts['user_id']);
+        $delete->execute();
         $this->rmdir($_SERVER['DOCUMENT_ROOT'].BASE_URI."/datas/".$posts['user_name']."/");
         session_destroy();
         $this->render('login', ['errors' => ['deleted']]);

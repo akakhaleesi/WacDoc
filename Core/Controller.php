@@ -21,7 +21,8 @@
 		protected function render($view, $scope = []) {
 
 			extract($scope);
-			$f = implode(DIRECTORY_SEPARATOR, [dirname(__DIR__), 'src', 'views', str_replace('Controller', '',basename(str_replace('\\', '/', get_class($this)))), $view]) . '.php';
+			$controller = (isset($controller) && !empty($controller)) ? $controller : get_class($this);
+			$f = implode(DIRECTORY_SEPARATOR, [dirname(__DIR__), 'src', 'views', str_replace('Controller', '',basename(str_replace('\\', '/', $controller))), $view]) . '.php';
 
 			if(file_exists($f)) {
 				ob_start();

@@ -9,7 +9,7 @@
 
 		public function __construct() {
 			try {
-			    $this->db = new \PDO('mysql:dbname=WacDoc;host=127.0.0.1', 'root', '');
+			    $this->db = new \PDO('mysql:dbname=WacDoc;host=127.0.0.1', 'akakhaleesi', 'toto');
 			} catch (PDOException $e) {
 			    echo 'Connexion échouée : ' . $e->getMessage();
 			}

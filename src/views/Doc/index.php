@@ -29,10 +29,13 @@ if(isset($files)){
     echo "<input name='doc_ext' type='text' value=".$file['extension']." readonly>";
     echo "<input type='submit' value='Rename file'>";
     echo "</form>";
-    echo "<form action='".BASE_URI."/doc/modify' method='post'>";
-    echo "<input name='doc_id' type='hidden' value=".$file['id'].">";
-    echo "<input type='submit' value='Modify file'>";
-    echo "</form>";
+    $ext = substr($file['extension'], 0, 6);
+    if($ext == '.mywac'){
+      echo "<form action='".BASE_URI."/doc/modify' method='post'>";
+      echo "<input name='doc_id' type='hidden' value=".$file['id'].">";
+      echo "<input type='submit' value='Modify file'>";
+      echo "</form>";
+    }
     echo "<form action='".BASE_URI."/doc/delete' method='post'>";
     echo "<input name='doc_id' type='hidden' value=".$file['id'].">";
     echo "<input type='submit' value='Delete file'>";

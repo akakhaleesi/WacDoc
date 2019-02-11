@@ -3,6 +3,7 @@
 namespace Core;
 
 $routes = [
+	'/',
 	'/app',
 	'/app/index',
 	'/app/login',
@@ -22,6 +23,7 @@ $routes = [
 
 foreach ($routes as $route) {
 		$args = explode('/', $route);
+		$controller = ($args[1] == null) ? 'app' : $args[1];
 		$action = (!isset($args[2])) ? 'index' : $args[2];
-		Router::connect($route, ['controller' => $args[1], 'action' => $action]);
+		Router::connect($route, ['controller' => $controller, 'action' => $action]);
 }

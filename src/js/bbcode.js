@@ -1,11 +1,18 @@
 $(function(){
 
+  $('#save_doc').click(function(event){
+    event.preventDefault();
+    var doc_content = $('#editor').text();
+    $('input[name="doc_content"]').val(doc_content);
+    $('#save').submit();
+  });
+
   $('#bold').click(function(){
-    wrap('bold');
+    wrap('span','bold');
   });
 
   $('#italic').click(function(){
-    wrap('italic');
+    wrap('span','italic');
   });
 
   $('#color').click(function(){
@@ -25,7 +32,15 @@ $(function(){
     }
   });
 
-  function wrap(tag){
+  $('#list1').click(function(){
+    wrap('li', 'puce');
+  });
+
+  $('#list2').click(function(){
+    wrap('li', 'decimal');
+  });
+
+  function wrap(balise, tag){
     var sel, range;
     var selectedText;
     if(window.getSelection){
@@ -46,7 +61,7 @@ $(function(){
             selectedText = range.toString();
             range.deleteContents();
 
-            var newNode = document.createElement("span");
+            var newNode = document.createElement(balise);
             var txt = document.createTextNode(selectedText);
             newNode.className = tag;
             newNode.append(txt);

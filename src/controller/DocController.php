@@ -200,6 +200,42 @@ class DocController extends \Core\Controller {
     }
   }
 
+  public function download(){
+    if(isset($_SESSION['user_id'])){
+      if(!isset($_POST['doc_id'])){
+        $this->render('index');
+      }
+      else {
+        $posts = ['doc_id' => $_POST['doc_id']];
+        unset($_POST);
+
+        $file = $this->db->prepare("SELECT name,extension FROM users_docs WHERE id = :id");
+        $file->bindParam(':id', $posts['doc_id']);
+        $file->execute();
+        if($datas = $file->fetch()){
+          $filepath = $_SERVER['DOCUMENT_ROOT'].BASE_URI."/datas/".$_SESSION['user_name']."/".$datas['name'].$datas['extension'];
+          if(!is_dir($filepath)){
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="'.basename($filepath).'"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($filepath));
+            flush(); // Flush system output buffer
+            readfile($filepath);
+            exit;
+
+            $this->render('index', ['errors' => ['']]);
+          }
+        }
+      }
+    }
+    else {
+      $this->render('login', ['controller' => 'appController']);
+    }
+  }
+
   public function saveFile($user_id,$user_name,$doc_name,$doc_content,$doc_ext){
     $checkUser = $this->db->prepare("SELECT id FROM users WHERE id = :id");
     $checkUser->bindParam(':id', $user_id);

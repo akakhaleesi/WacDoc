@@ -7,3 +7,9 @@
 .italic {
   font-style: italic;
 }
+.puce {
+  list-style-type: circle;
+}
+.decimal {
+  list-style-type: decimal;
+}

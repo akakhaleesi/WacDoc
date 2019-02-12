@@ -40,6 +40,10 @@ if(isset($files)){
     echo "<input name='doc_id' type='hidden' value=".$file['id'].">";
     echo "<input type='submit' value='Delete file'>";
     echo "</form>";
+    echo "<form action='".BASE_URI."/doc/download' method='post'>";
+    echo "<input name='doc_id' type='hidden' value=".$file['id'].">";
+    echo "<input type='submit' value='Download file'>";
+    echo "</form>";
   }
   echo "</div>";
 }
